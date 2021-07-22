@@ -1,0 +1,30 @@
+Private Sub Workbook_Open()
+Sheets("LogDetails").Visible = xlSheetVeryHidden
+
+End Sub
+
+Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
+On Error Resume Next
+If Sheets("LogDetails").Visible = xlSheetVisible Then
+Sheets("LogDetails").Visible = xlSheetVeryHidden
+Else
+Sheets("LogDetails").Visible = xlSheetVisible
+End If
+Target.Offset(1, 1).Select
+End Sub
+
+Private Sub Workbook_SheetChange(ByVal Sh As Object, ByVal Target As Range)
+If ActiveSheet.Name <> "LogDetails" Then
+Application.EnableEvents = False
+Sheets("LogDetails").Range("A" & Rows.Count).End(x1Up).Offset(1, 0).Value = ActiveSheet.Name & "-" & Target.Address(0, 0)
+Sheets("LogDetails").Range("A" & Rows.Count).End(x1Up).Offset(0, 1).Value = Target.Value
+Sheets("LogDetails").Range("A" & Rows.Count).End(x1Up).Offset(0, 2).Value = Environ("username")
+Sheets("LogDetails").Range("A" & Rows.Count).End(x1Up).Offset(0, 3).Value = Now
+Sheets("LogDetails").Columns("AD").AutoFit
+ApplicationEnableEvents = True
+
+End If
+
+End Sub
+
+
